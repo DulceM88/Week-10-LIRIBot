@@ -7,10 +7,13 @@ var tokenS= twitKeys.twitterKeys.access_token_secret;
 */
 
 var spotify = require('spotify');
+var request = require("request");
 
 var nodeArgs= process.argv;
 
 var songTitle="";
+var movieName = "";
+
 
 if (process.argv[2] === "spotify") {
 	for (var i = 3; i < nodeArgs.length; i++) {
@@ -40,4 +43,33 @@ if (process.argv[2] === "spotify") {
 
 }
 
+if (process.argv[2]==="movie") {
+	for (var i = 3; i < nodeArgs.length; i++) {
+		movieName = movieName + " " + nodeArgs[i];
+	}
+ 	console.log("Searching for" + movieName);
+ 	console.log("_____________________________");
 
+ 	var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&r=json";
+
+ 	request(queryUrl, function(error, response, body) {
+
+	  // If the request is successful
+	  if (!error && response.statusCode === 200) {
+
+    // Parse the body of the site and recover just the imdbRating
+    // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
+    console.log(JSON.parse(body).Title);
+    console.log(JSON.parse(body).Year);
+    console.log(JSON.parse(body).imdbRating);
+    console.log(JSON.parse(body).Country);
+    console.log(JSON.parse(body).Language);
+    console.log(JSON.parse(body).Plot);
+    console.log(JSON.parse(body).Actors);
+    console.log(JSON.parse(body).Ratings);
+
+
+
+  	  } 	
+	});
+};
